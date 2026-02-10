@@ -25,7 +25,7 @@
             background-color: #f8f9fa;
             padding: 3rem 2rem;
             text-align: center;
-            border-bottom: 2px solid #e9ecef;
+            border-bottom: 1px solid #e9ecef;
             position: relative;
         }
 
@@ -107,9 +107,7 @@
         }
 
         .project-card:hover {
-            border-color: #0066cc;
-            box-shadow: 0 4px 12px rgba(0, 102, 204, 0.1);
-            transform: translateY(-2px);
+            border-color: gold;
         }
 
         .project-title {
@@ -129,11 +127,6 @@
 <body>
     <!-- Row 1: Header -->
     <header>
-        <button class="menu-button" onclick="alert('Menu clicked!')">
-            <span></span>
-            <span></span>
-            <span></span>
-        </button>
         <h1>dead.simple.apps</h1>
         <div class="contact">
             <a href="mailto:irene.ryu.lance@gmail.com">irene.ryu.lance@gmail.com</a>
@@ -176,11 +169,13 @@
         // Initialize Projects component
         const projects = new Projects('projects-container');
 
-        // Test with Google
-        projects.addProject('google', 'google.com');
-
-        // You can add more projects using:
-        // projects.addProject('Your Project Title', 'yourproject.com');
+        fetch('data/projects.json')
+        .then(res => res.json())
+        .then(data => {
+            data.forEach(value => {
+                projects.addProject(value.title, value.link);
+            });
+        })
     </script>
 </body>
 </html>
