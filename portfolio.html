@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>dead.simple.apps - Portfolio</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            min-height: 100vh;
+            display: grid;
+            grid-template-rows: auto 1fr;
+        }
+
+        header {
+            background-color: #f8f9fa;
+            padding: 3rem 2rem;
+            text-align: center;
+            border-bottom: 2px solid #e9ecef;
+            position: relative;
+        }
+
+        /* Menu Button */
+        .menu-button {
+            position: absolute;
+            top: 2rem;
+            right: 2rem;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            transition: opacity 0.2s;
+        }
+
+        .menu-button:hover {
+            opacity: 0.7;
+        }
+
+        .menu-button span {
+            display: block;
+            width: 28px;
+            height: 3px;
+            background-color: #212529;
+            border-radius: 2px;
+            transition: transform 0.3s;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 300;
+            letter-spacing: 0.05em;
+            margin-bottom: 1rem;
+            color: #212529;
+        }
+
+        .contact {
+            font-size: 1rem;
+            color: #6c757d;
+        }
+
+        .contact a {
+            color: #0066cc;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .contact a:hover {
+            color: #004c99;
+            text-decoration: underline;
+        }
+
+        main {
+            padding: 3rem 2rem;
+            max-width: 1200px;
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        /* Projects Component */
+        .projects {
+            display: grid;
+            gap: 1.5rem;
+        }
+
+        .project-card {
+            background: white;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            padding: 2rem;
+            transition: all 0.2s;
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+
+        .project-card:hover {
+            border-color: #0066cc;
+            box-shadow: 0 4px 12px rgba(0, 102, 204, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .project-title {
+            font-size: 1.5rem;
+            font-weight: 500;
+            color: #212529;
+            margin-bottom: 0.5rem;
+        }
+
+        .project-link {
+            font-size: 0.9rem;
+            color: #6c757d;
+            font-family: 'Courier New', monospace;
+        }
+    </style>
+</head>
+<body>
+    <!-- Row 1: Header -->
+    <header>
+        <button class="menu-button" onclick="alert('Menu clicked!')">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+        <h1>dead.simple.apps</h1>
+        <div class="contact">
+            <a href="mailto:irene.ryu.lance@gmail.com">irene.ryu.lance@gmail.com</a>
+        </div>
+    </header>
+
+    <!-- Row 2: Body -->
+    <main>
+        <div class="projects" id="projects-container">
+            <!-- Projects will be populated here -->
+        </div>
+    </main>
+
+    <script>
+        // Projects Component
+        class Projects {
+            constructor(containerId) {
+                this.container = document.getElementById(containerId);
+                this.projects = [];
+            }
+
+            addProject(title, link) {
+                // Ensure link has protocol
+                const formattedLink = link.startsWith('http') ? link : `https://${link}`;
+                
+                this.projects.push({ title, link: formattedLink });
+                this.render();
+            }
+
+            render() {
+                this.container.innerHTML = this.projects.map(project => `
+                    <a href="${project.link}" class="project-card" target="_blank" rel="noopener noreferrer">
+                        <div class="project-title">${project.title}</div>
+                        <div class="project-link">${project.link}</div>
+                    </a>
+                `).join('');
+            }
+        }
+
+        // Initialize Projects component
+        const projects = new Projects('projects-container');
+
+        // Test with Google
+        projects.addProject('google', 'google.com');
+
+        // You can add more projects using:
+        // projects.addProject('Your Project Title', 'yourproject.com');
+    </script>
+</body>
+</html>
