@@ -1,0 +1,16 @@
+{
+  "name": "dead-simple-apps",
+  "version": "1.0.0",
+  "description": "Portfolio and admin website",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}

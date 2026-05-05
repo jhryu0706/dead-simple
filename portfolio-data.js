@@ -1,0 +1,55 @@
+// Shared data for the portfolio
+window.PORTFOLIO_DATA = {
+  name: "dead.simple.apps",
+  email: "deadsimpleworld@gmail.com",
+  tagline: "A studio for considered software.",
+  intro: "We make small, exact apps for people who value their attention. Each product is shaped by one principle: clarity over cleverness.",
+  apps: [
+    {
+      n: "01",
+      title: "Simple Time Converter",
+      desc: "Timezones, distilled to a single, legible gesture.",
+      year: "2025",
+      platform: "iOS",
+      status: "Available",
+      link: "#",
+    },
+    {
+      n: "02",
+      title: "Tip Calc",
+      desc: "An elegant tool for splitting the bill — quietly precise.",
+      year: "2025",
+      platform: "iOS",
+      status: "Available",
+      link: "#",
+    },
+    {
+      n: "03",
+      title: "Unit",
+      desc: "Conversions across units, on a single calm surface.",
+      year: "2024",
+      platform: "iOS",
+      status: "Available",
+      link: "#",
+    },
+    {
+      n: "04",
+      title: "Quiet Timer",
+      desc: "A timer that respects the room it sits in.",
+      year: "2024",
+      platform: "iOS",
+      status: "Available",
+      link: "#",
+    },
+  ],
+  now: [
+    { label: "In development", value: "A new product, currently in private testing." },
+    { label: "Reading", value: "Dieter Rams — Less and More." },
+    { label: "Studying", value: "The shape of restraint in everyday tools." },
+  ],
+  stats: [
+    { n: "04", l: "Apps shipped" },
+    { n: "00", l: "Settings screens with tabs" },
+    { n: "01", l: "Goals: clarity" },
+  ],
+};
