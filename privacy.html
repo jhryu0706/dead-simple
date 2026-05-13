@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>dead.simple.apps — Privacy Policies</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;1,9..144,300;1,9..144,400&family=Inter+Tight:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    html, body { margin: 0; padding: 0; min-height: 100%; background: #ffffff; color: #0a0a0a; }
+    body { font-family: "Inter Tight", system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+    a { text-decoration: none; color: inherit; }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" crossorigin="anonymous"></script>
+
+  <script src="portfolio-data.js"></script>
+
+  <script type="text/babel">
+    function Privacy() {
+      const apps = window.PORTFOLIO_DATA.apps;
+
+      const toSlug = (title) =>
+        title.toLowerCase().replace(/\s+/g, "-");
+
+      return (
+        <div style={{
+          maxWidth: 480,
+          margin: "0 auto",
+          padding: "64px 24px",
+        }}>
+          <a href="/" style={{
+            fontFamily: '"Inter Tight", system-ui, sans-serif',
+            fontWeight: 500,
+            fontSize: 10.5,
+            letterSpacing: "0.2em",
+            textTransform: "uppercase",
+            color: "rgba(10,10,10,0.45)",
+            display: "inline-block",
+            marginBottom: 48,
+          }}>
+            ← Back
+          </a>
+
+          <h1 style={{
+            fontFamily: '"Fraunces", serif',
+            fontWeight: 400,
+            fontSize: 32,
+            letterSpacing: "-0.02em",
+            lineHeight: 1.1,
+            margin: "0 0 40px",
+          }}>
+            Privacy Policies
+          </h1>
+
+          <div style={{ display: "flex", flexDirection: "column", gap: 1 }}>
+            {apps.map((app) => (
+              <a
+                key={app.n}
+                href={`/privacy-policy/${toSlug(app.title)}`}
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                  padding: "18px 0",
+                  borderBottom: "1px solid rgba(10,10,10,0.08)",
+                }}
+              >
+                <div>
+                  <div style={{
+                    fontFamily: '"Inter Tight", system-ui, sans-serif',
+                    fontWeight: 500,
+                    fontSize: 14,
+                    color: "#0a0a0a",
+                  }}>
+                    {app.title}
+                  </div>
+                  <div style={{
+                    fontFamily: '"Inter Tight", system-ui, sans-serif',
+                    fontWeight: 400,
+                    fontSize: 12,
+                    color: "rgba(10,10,10,0.4)",
+                    marginTop: 4,
+                  }}>
+                    {app.platform} · {app.year}
+                  </div>
+                </div>
+                <span style={{
+                  fontSize: 14,
+                  color: "rgba(10,10,10,0.3)",
+                }}>→</span>
+              </a>
+            ))}
+          </div>
+        </div>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById("root")).render(<Privacy />);
+  </script>
+
+</body>
+</html>

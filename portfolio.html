@@ -6,11 +6,17 @@
   <title>dead.simple.apps — Portfolio</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..700&family=JetBrains+Mono:wght@300;400;500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;1,9..144,300;1,9..144,400&family=Inter+Tight:wght@300;400;500;600&display=swap" rel="stylesheet" />
   <style>
-    html, body { margin: 0; padding: 0; height: 100%; background: #ffffff; overflow: hidden; }
-    body { font-family: "Inter", -apple-system, BlinkMacSystemFont, "Helvetica Neue", Helvetica, Arial, sans-serif; }
+    html, body { margin: 0; padding: 0; height: 100%; background: #ffffff; overflow: hidden; color: #0a0a0a; }
+    body { font-family: "Inter Tight", system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+    button { font-family: inherit; }
     a { text-decoration: none; color: inherit; }
+
+    @keyframes phoneIn {
+      from { opacity: 0; transform: translateY(12px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
   </style>
 </head>
 <body>
@@ -23,98 +29,326 @@
   <script src="portfolio-data.js"></script>
 
   <script type="text/babel">
+    const navBtn = (onClick, disabled, label, children) => (
+      <button
+        onClick={onClick}
+        disabled={disabled}
+        style={{
+          background: "none",
+          border: "1px solid rgba(10,10,10,0.28)",
+          borderRadius: 999,
+          width: 40,
+          height: 40,
+          cursor: disabled ? "default" : "pointer",
+          opacity: disabled ? 0.3 : 1,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          fontSize: 16,
+          color: "#0a0a0a",
+          padding: 0,
+          transition: "opacity 0.4s ease",
+        }}
+        aria-label={label}
+      >
+        {children}
+      </button>
+    );
+
     function App() {
-      const accent = "#ff3b1d";
-
-      const t = {
-        ink: "#0a0a0a",
-        paper: "#ffffff",
-        rule: "rgba(10,10,10,0.92)",
-        ruleSoft: "rgba(10,10,10,0.18)",
-        muted: "rgba(10,10,10,0.5)",
-        accent,
-        displayFont: '"Inter", "Helvetica Neue", Helvetica, Arial, sans-serif',
-        bodyFont: '"Inter", "Helvetica Neue", Helvetica, Arial, sans-serif',
-      };
-
       const D = window.PORTFOLIO_DATA;
+      const apps = D.apps;
+      const [i, setI] = React.useState(0);
+      const app = apps[i];
+
+      const [width, setWidth] = React.useState(window.innerWidth);
+      React.useEffect(() => {
+        const onResize = () => setWidth(window.innerWidth);
+        window.addEventListener("resize", onResize);
+        return () => window.removeEventListener("resize", onResize);
+      }, []);
+      const isMobile = width < 640;
+
+      // Keyboard navigation
+      React.useEffect(() => {
+        const handleKey = (e) => {
+          if (e.key === "ArrowLeft") setI((prev) => Math.max(0, prev - 1));
+          if (e.key === "ArrowRight") setI((prev) => Math.min(apps.length - 1, prev + 1));
+        };
+        window.addEventListener("keydown", handleKey);
+        return () => window.removeEventListener("keydown", handleKey);
+      }, []);
 
       return (
         <div style={{
-          fontFamily: t.bodyFont,
-          color: t.ink,
-          background: t.paper,
           height: "100vh",
           width: "100%",
-          padding: "72px 96px",
-          boxSizing: "border-box",
           display: "flex",
           flexDirection: "column",
-          justifyContent: "flex-start",
-          gap: 48,
-          maxWidth: 1440,
-          margin: "0 auto",
+          boxSizing: "border-box",
         }}>
-          {/* TOP RULE + HEADER ROW */}
-          <div>
-            <div style={{ borderTop: `2px solid ${t.rule}`, marginBottom: 24 }} />
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr 1fr", gap: 24 }}>
-            <Cell label="Studio" value="dead.simple.apps" t={t} />
-            <Cell label="Practice" value="Independent" t={t} />
-            <Cell label="Since" value="2024" t={t} />
-            <Cell label="Enquiries" value={D.email} link={`mailto:${D.email}`} t={t} />
-            </div>
-          </div>
-
-          {/* MASSIVE WORDMARK */}
-          <div style={{ position: "relative" }}>
-            <div style={{
-              fontFamily: t.bodyFont,
-              fontSize: 11,
+          {/* Header */}
+          <header style={{
+            padding: isMobile ? "28px 24px 0" : "32px 64px 0",
+            textAlign: "center",
+            flexShrink: 0,
+          }}>
+            <h1 style={{
+              fontFamily: '"Inter", serif',
+              fontWeight: 300,
+              fontSize: isMobile ? 40 : 72,
+              lineHeight: 0.95,
+              letterSpacing: "-0.03em",
+              color: "#0a0a0a",
+              margin: 0,
+              marginTop: 20,
+            }}>
+              dead simple apps.
+            </h1>
+            <p style={{
+              margin: "24px auto 0",
+              fontFamily: '"Inter Tight", system-ui, sans-serif',
+              fontWeight: 500,
+              fontSize: 10.5,
               letterSpacing: "0.22em",
               textTransform: "uppercase",
-              color: t.muted,
-              marginBottom: 24,
+              color: "rgba(10,10,10,0.55)",
             }}>
-              <span style={{ color: t.accent }}>&#9679;</span> Software studio
-            </div>
+              a simple solution to everyday problems.
+            </p>
+          </header>
+
+          {/* Body — three-column layout */}
+          <div style={{
+            flex: 1,
+            display: "flex",
+            flexDirection: isMobile ? "column" : "row",
+            alignItems: "center",
+            justifyContent: "center",
+            minHeight: 0,
+            padding: isMobile ? "24px 24px 24px" : "0 24px 48px",
+            gap: isMobile ? 28 : 100,
+          }}>
+            {/* Left column — meta (on mobile: below phone, reordered via order) */}
             <div style={{
-              fontFamily: t.displayFont,
-              fontWeight: 600,
-              fontSize: "clamp(100px, 18vw, 260px)",
-              lineHeight: 0.85,
-              letterSpacing: "-0.06em",
-              color: t.ink,
-              textTransform: "lowercase",
+              width: isMobile ? "100%" : 180,
+              textAlign: isMobile ? "center" : "right",
+              flexShrink: 0,
+              order: isMobile ? 2 : 0,
             }}>
-              dead<br/>simple<span style={{ color: t.accent }}>.</span>
+              <div style={{
+                fontFamily: '"Inter Tight", system-ui, sans-serif',
+                fontWeight: 500,
+                fontSize: 10.5,
+                letterSpacing: "0.2em",
+                textTransform: "uppercase",
+                color: "rgba(10,10,10,0.55)",
+                marginBottom: 14,
+              }}>
+                {app.n} / {String(apps.length).padStart(2, "0")}
+              </div>
+              <div style={{
+                fontFamily: '"Fraunces", serif',
+                fontSize: isMobile ? 26 : 32,
+                fontWeight: 400,
+                letterSpacing: "-0.02em",
+                color: "#0a0a0a",
+                marginBottom: 12,
+                lineHeight: 1.05,
+              }}>
+                {app.title}
+              </div>
+              <div style={{
+                fontSize: 13.5,
+                lineHeight: 1.5,
+                color: "rgba(10,10,10,0.55)",
+                marginBottom: 24,
+                marginLeft: isMobile ? "auto" : undefined,
+                marginRight: isMobile ? "auto" : undefined,
+                maxWidth: isMobile ? 320 : undefined,
+              }}>
+                {app.desc.split(/(past|future)/gi).map((part, idx) =>
+                  /^(past|future)$/i.test(part)
+                    ? <mark key={idx} style={{
+                        background: "linear-gradient(180deg, transparent 45%, rgba(255,220,60,0.45) 45%)",
+                        padding: "0 2px",
+                        borderRadius: 2,
+                        color: "inherit",
+                      }}>{part}</mark>
+                    : part
+                )}
+              </div>
+              <a
+                href={app.link}
+                style={{
+                  display: "inline-block",
+                  fontFamily: '"Inter Tight", system-ui, sans-serif',
+                  fontWeight: 600,
+                  fontSize: 11,
+                  letterSpacing: "0.14em",
+                  textTransform: "uppercase",
+                  color: "#fff",
+                  background: "#0a0a0a",
+                  padding: "10px 20px",
+                  borderRadius: 999,
+                }}
+              >
+                Get the app →
+              </a>
             </div>
+
+            {/* Center — phone with SVG shell */}
+            <div
+              key={app.n}
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                order: isMobile ? 1 : 0,
+                animation: "phoneIn 380ms cubic-bezier(0.2,0.7,0.2,1) both",
+              }}
+            >
+              <div style={{
+                position: "relative",
+                height: isMobile ? "min(340px, calc(100vh - 360px))" : "min(430px, calc(100vh - 320px))",
+                aspectRatio: "320 / 580",
+              }}>
+                {/* Screen area — sits behind the SVG frame */}
+                <div style={{
+                  position: "absolute",
+                  top: "3.28%",
+                  left: "9.06%",
+                  right: "9.06%",
+                  bottom: "3.28%",
+                  borderRadius: "15.27% / 7.38%",
+                  background: "rgba(10,10,10,0.03)",
+                  overflow: "hidden",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}>
+                  <img
+                    src="screenshot-stc.png"
+                    alt="Simple Time Converter"
+                    style={{
+                      width: "100%",
+                      height: "100%",
+                      objectFit: "cover",
+                    }}
+                  />
+                </div>
+                {/* SVG phone shell — overlays on top */}
+                <img
+                  src="phone-shell.svg"
+                  alt=""
+                  style={{
+                    position: "absolute",
+                    inset: 0,
+                    width: "100%",
+                    height: "100%",
+                    pointerEvents: "none",
+                  }}
+                />
+              </div>
+            </div>
+
+            {/* Right column — spacer for balance */}
+            {!isMobile && (
+              <div style={{ width: 180, flexShrink: 0 }} />
+            )}
           </div>
 
-          {/* FOOTER */}
-          <div style={{ marginTop: "auto", display: "flex", justifyContent: "space-between", alignItems: "baseline", borderTop: `2px solid ${t.rule}`, paddingTop: 20, fontFamily: t.bodyFont, fontSize: 11, letterSpacing: "0.16em", textTransform: "uppercase", color: t.muted }}>
-            <div>dead.simple.apps</div>
-            <div style={{ color: t.accent }}>&#9679; Open to commissions</div>
+          {/* Footer */}
+          <div style={{
+            textAlign: "center",
+            paddingBottom: isMobile ? 20 : 28,
+            flexShrink: 0,
+          }}>
+            <a
+              href="/privacy-policy"
+              style={{
+                fontFamily: '"Inter Tight", system-ui, sans-serif',
+                fontWeight: 400,
+                fontSize: 10,
+                letterSpacing: "0.08em",
+                color: "rgba(10,10,10,0.3)",
+              }}
+            >
+              Privacy Policy
+            </a>
+            <span style={{
+              fontFamily: '"Inter Tight", system-ui, sans-serif',
+              fontSize: 10,
+              color: "rgba(10,10,10,0.2)",
+              margin: "0 10px",
+            }}>·</span>
+            <a
+              href="mailto:deadsimpleworld@gmail.com"
+              style={{
+                fontFamily: '"Inter Tight", system-ui, sans-serif',
+                fontWeight: 400,
+                fontSize: 10,
+                letterSpacing: "0.08em",
+                color: "rgba(10,10,10,0.3)",
+              }}
+            >
+              deadsimpleworld@gmail.com
+            </a>
           </div>
-        </div>
-      );
-    }
 
-    function Cell({ label, value, link, t }) {
-      const Tag = link ? "a" : "div";
-      return (
-        <div style={{ borderTop: `1px solid ${t.ruleSoft}`, paddingTop: 12 }}>
-          <div style={{ fontFamily: t.bodyFont, fontSize: 10, letterSpacing: "0.18em", textTransform: "uppercase", color: t.muted, marginBottom: 8 }}>
-            {label}
-          </div>
-          <Tag href={link} style={{ fontFamily: t.bodyFont, fontSize: 14, color: t.ink, textDecoration: "none", display: "block" }}>
-            {value}
-          </Tag>
+          {/* Navigation — hidden when only 1 app */}
+          {apps.length > 1 && (
+            <div style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: 28,
+              paddingBottom: isMobile ? 24 : 48,
+              paddingLeft: isMobile ? 24 : 64,
+              paddingRight: isMobile ? 24 : 64,
+              flexShrink: 0,
+            }}>
+              {navBtn(
+                () => setI((p) => Math.max(0, p - 1)),
+                i === 0,
+                "Previous project",
+                <span>&#8592;</span>
+              )}
+
+              <div style={{ display: "flex", gap: 10, alignItems: "center" }}>
+                {apps.map((_, idx) => (
+                  <button
+                    key={idx}
+                    onClick={() => setI(idx)}
+                    style={{
+                      width: idx === i ? 22 : 7,
+                      height: 7,
+                      borderRadius: 4,
+                      border: "none",
+                      background: idx === i ? "#0a0a0a" : "rgba(10,10,10,0.22)",
+                      cursor: "pointer",
+                      padding: 0,
+                      transition: "all 280ms cubic-bezier(0.2,0.7,0.2,1)",
+                    }}
+                    aria-label={`Go to project ${idx + 1}`}
+                  />
+                ))}
+              </div>
+
+              {navBtn(
+                () => setI((p) => Math.min(apps.length - 1, p + 1)),
+                i === apps.length - 1,
+                "Next project",
+                <span>&#8594;</span>
+              )}
+            </div>
+          )}
         </div>
       );
     }
 
     ReactDOM.createRoot(document.getElementById("root")).render(<App />);
   </script>
+
 </body>
 </html>

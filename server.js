@@ -12,6 +12,11 @@ app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'portfolio.html'));
 });
 
+// Privacy policies listing page
+app.get('/privacy-policy', (req, res) => {
+  res.sendFile(path.join(__dirname, 'privacy.html'));
+});
+
 // Privacy policy routes
 app.get('/privacy-policy/:appName', (req, res) => {
   const appName = req.params.appName;
